@@ -1,0 +1,113 @@
+
+
+# ROADMAP
+
+[ ] main.py                     # Entry point (CLI or GUI launcher)
+[ ] requirements.txt            # Dependencies
+[ ] README.md                   # Project description
+
+[X] data/
+    └── [X] particles.json          # Particle database (mass, charge, etc.)
+
+[X] src/
+    └── [X] __init__.py
+    └── [X] parser.py               # Input parser and normalization
+    └── [X] particles.py            # Particle class and loading logic
+    └── [X] validator.py            # Validity checks (conservation laws, rules)
+    └── [X] diagram_generator.py    # TikZ layout logic and output
+    └── [X] templates/
+      └── [X] feynman_template.tex  # Jinja2 TikZ template
+    └── [ ] compiler.py             # Optional: compile TikZ to PDF or PNG
+
+[X] tests/
+    └── [X] __init__.py
+    └── [X] test_parser.py
+    └── [X] test_validator.py
+    └── [X] test_diagram_generator.py
+    └── [X] test_particles.py
+    └── [X] test_normalizer.py		
+
+[X] output/
+    └── [X] diagrams/               # Generated .tex or .pdf diagrams
+    └── [X] logs/                   # (Optional) Logs or error message
+
+
+# STEPS
+
+⸻
+
+[X] Step 1: Set Up the Project Environment
+	[X]	Create your folder structure (src/, data/, output/)
+	[X]	Create a virtual environment and install basic tools:
+
+⸻
+
+[X] Step 2: Build the Particle Database
+
+Files: data/particles.json, particles.py
+	[X]	Create particles.json with basic particles (electron, positron, muon, photon, etc.)
+	[X]	Write load_particles() in particles.py to parse and wrap data in Particle objects.
+	[X]	Test it by printing particles in a temp script or main.py.
+
+⸻
+
+[X] Step 3: Implement the Reaction Parser
+
+File: parser.py
+	[X]	Write parse_reaction("e+ e- -> mu+ mu-") → {"initial": [...], "final": [...]}.
+	[X]	Normalize symbols (e.g., e+ → positron) using the particle database.
+
+⸻
+
+[X] Step 4: Create the Validation Engine
+
+File: validator.py
+	[X]	Load particles for both sides of the reaction.
+	[X]	Check conservation of charge, lepton number, and maybe other rules.
+	[X]	Make this pure logic for easy unit testing.
+
+⸻
+
+[X] Step 5: Generate the TikZ Diagram
+
+Files: diagram_generator.py, templates/feynman_template.tex
+	[X]	Create a minimal feynman_template.tex with placeholders.
+	[X]	Use Jinja2 to fill the diagram with initial and final particles.
+	[X]	Output .tex file to output/diagrams/.
+
+⸻
+
+[X] Step 6: Tie Everything Together
+
+File: main.py
+	[X]	Load particles.
+	[X]	Parse input reaction from command-line or hardcoded test.
+	[X]	Validate it.
+	[X]	If valid, generate the diagram.
+
+⸻
+
+[X] Step 7: Optional - Compile TikZ to PDF/Image
+
+File: compiler.py
+	[X]	Use subprocess.run(["pdflatex", "diagram.tex"])
+	[X]	Run this only if a --compile flag is passed in main.py
+
+⸻
+
+[X] Step 8: Add Unit Tests
+
+Folder: tests/
+	[X]	Write test cases for each module
+
+⸻
+
+[ ] Step 9: Polish
+	[ ] !!!!! Complex particles 
+	[ ]	Unify the symbol in .json. greek letters or latex code?
+	[ ]	Support synonyms (e+, positron)
+	[ ]	Add more particles/interactions to particles.json
+	[ ]	Add CLI argument parsing (argparse)
+	[ ] Add identifier of reactions
+
+⸻

@@ -1,0 +1,304 @@
+{
+    "electron": {
+        "symbol": "e-",
+        "mass": 0.511,
+        "charge": -1,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "positron": {
+        "symbol": "e+",
+        "mass": 0.511,
+        "charge": 1,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": -1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "electron neutrino": {
+        "symbol": "νe",
+        "mass": 0.0,
+        "charge": 0,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "electron antineutrino": {
+        "name": "electron antineutrino",
+        "symbol": "νe̅",
+        "mass": 0.0,
+        "charge": 0,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": -1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "muon": {
+        "name": "muon",
+        "symbol": "μ-",
+        "mass": 105.66,
+        "charge": -1,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "antimuon": {
+        "symbol": "μ+",
+        "mass": 105.66,
+        "charge": 1,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": -1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "muon neutrino": {
+        "symbol": "νμ",
+        "mass": 0.0,
+        "charge": 0,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "muon antineutrino": {
+        "symbol": "νμ̅",
+        "mass": 0.0,
+        "charge": 0,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": -1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "tau": {
+        "symbol": "τ-",
+        "mass": 1.7768,
+        "charge": -1,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "antitau": {
+        "symbol": "τ+",
+        "mass": 1.7768,
+        "charge": 1,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": -1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "tau neutrino": {
+        "symbol": "ντ",
+        "mass": 0.0,
+        "charge": 0,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "tau antineutrino": {
+        "symbol": "ντ̅",
+        "mass": 0.0,
+        "charge": 0,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": -1,
+        "interactions": ["EC", "weak"],
+        "type": "lepton"
+    },
+    "up": {
+        "symbol": "u",
+        "mass": 2.2,
+        "charge": 0.6667,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "antiup": {
+        "symbol": "u̅",
+        "mass": 2.2,
+        "charge": -0.6667,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "down": {
+        "symbol": "d",
+        "mass": 4.7,
+        "charge": -0.3333,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "antidown": {
+        "symbol": "d̅",
+        "mass": 4.7,
+        "charge": 0.3333,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "charm": {
+        "symbol": "c",
+        "mass": 1280.0,
+        "charge": 0.6667,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "anticharm": {
+        "symbol": "c̅",
+        "mass": 1280.0,
+        "charge": -0.6667,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "strange": {
+        "symbol": "s",
+        "mass": 96.0,
+        "charge": -0.3333,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "antistrange": {
+        "symbol": "s̅",
+        "mass": 96.0,
+        "charge": 0.3333,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "top": {
+        "symbol": "t",
+        "mass": 173000.0,
+        "charge": 0.6667,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "antitop": {
+        "symbol": "t̅",
+        "mass": 173000.0,
+        "charge": -0.6667,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "bottom": {
+        "symbol": "b",
+        "mass": 4180.0,
+        "charge": -0.3333,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "antibottom": {
+        "symbol": "b̅",
+        "mass": 4180.0,
+        "charge": 0.3333,
+        "spin": 0.5,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong", "EC", "weak"],
+        "type": "quark"
+    },
+    "gluon": {
+        "symbol": "g",
+        "mass": 0.0,
+        "charge": 0,
+        "spin": 1,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["strong"],
+        "type": "boson"
+    },
+    "photon": {
+        "symbol": "γ",
+        "mass": 0.0,
+        "charge": 0,
+        "spin": 1,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["EC"],
+        "type": "boson"
+    },
+    "Z boson": {
+        "symbol": "Z",
+        "mass": 91188.0,
+        "charge": 0,
+        "spin": 1,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["weak"],
+        "type": "boson"
+    },
+    "W+ boson": {
+        "symbol": "W+",
+        "mass": 80360.0,
+        "charge": 1,
+        "spin": 1,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["weak"],
+        "type": "boson"
+    },
+    "W- boson": {
+        "symbol": "W-",
+        "mass": 80360.0,
+        "charge": -1,
+        "spin": 1,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["weak"],
+        "type": "boson"
+    },
+    "Higgs boson": {
+        "symbol": "H",
+        "mass": 125000.0,
+        "charge": 0,
+        "spin": 0,
+        "baryon_number": 0,
+        "lepton_number": 0,
+        "interactions": ["weak"],
+        "type": "boson"
+    }
+}

@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage{tikz}
+\begin{document}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{feynman}
+\diagram{
+    i1 [particle=\(positron\)] -- [fermion] a -- [fermion] f1 [particle=\(positron\)],
+    i2 [particle=\(\)] -- [anti fermion] b -- [anti fermion] f2 [particle=\(\)],
+    a -- [boson, edge label=\(\gamma\) or \(Z\)] b,
+};
+\end{feynman}
+\end{tikzpicture}
+\end{figure}
+
+\end{document}
