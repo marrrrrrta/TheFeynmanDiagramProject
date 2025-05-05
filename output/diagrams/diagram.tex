@@ -1,18 +1,21 @@
 \documentclass{article}
 \usepackage[compat=1.1.0]{tikz-feynman}
 \usepackage{tikz}
+\usepackage{svrsymbols}
 \begin{document}
 
 \begin{figure}
 \centering
 \begin{tikzpicture}
-\begin{feynman}
-\diagram{
-    i1 [particle=\(positron\)] -- [fermion] a -- [fermion] f1 [particle=\(positron\)],
-    i2 [particle=\(\)] -- [anti fermion] b -- [anti fermion] f2 [particle=\(\)],
-    a -- [boson, edge label=\(\gamma\) or \(Z\)] b,
-};
-\end{feynman}
+    \begin{feynman}
+        \diagram [horizontal=a to b, layered layout] {
+          a [particle=\(\bar{u}\)] -- [anti fermion] b -- [fermion] f1 [particle=\(\bar{u}\)],
+          a2 [below=of a, particle=\(c\)] -- [fermion] b2 -- [fermion] f2 [particle=\(d\)],
+          b2 -- [boson, edge label=\(W^+\)] c,
+          c -- [anti fermion] f3 [particle=\(\bar{d}\)],
+          c -- [fermion] f4 [particle=\(u\)],
+        };
+      \end{feynman}
 \end{tikzpicture}
 \end{figure}
 
