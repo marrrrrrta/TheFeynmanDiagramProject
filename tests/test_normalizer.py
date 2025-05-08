@@ -1,13 +1,13 @@
 import unittest
 from src.parser import normalize_particles
-from src.particles import load_particles
+from src.particles import load_ElementalParticles
 
 # Checks if:
 # - the parsed reaction is normalized correctly
 
 class TestNormalizer(unittest.TestCase):
     def test_normalize_particles(self):
-        db = load_particles()
+        db = load_ElementalParticles()
         reaction = {
             "initial": ["e+", "e-"],
             "final": ["μ+", "μ-"]

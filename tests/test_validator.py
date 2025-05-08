@@ -1,6 +1,6 @@
 import unittest
 from src.validator import validate_process
-from src.particles import load_particles
+from src.particles import load_ElementalParticles
 from src.parser import normalize_particles
 
 # Checks if:
@@ -9,7 +9,7 @@ from src.parser import normalize_particles
 
 class TestValidator(unittest.TestCase):
     def test_validate_process(self):
-        particles_db = load_particles("data/particles.json")
+        particles_db = load_ElementalParticles("data/particles.json")
         reaction1 = {
             "initial": ["e+", "e-"],
             "final": ["e+", "e-"]

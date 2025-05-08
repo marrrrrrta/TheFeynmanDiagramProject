@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\tikzfeynmanset{warn luatex=false}
+
+\begin{document}
+
+% sides of the reaction: right, left
+% number of particles: 1, 2, ...
+
+% Max length: number of particles
+
+
+\begin{tikzpicture}
+  \begin{feynman}
+    % Spectator particle:
+    \vertex (right1) at (0,4) {\(\bar{u}\)};
+    \vertex (center1) at (2,4);
+    \vertex (left1) at (4,4) {\(\bar{u}\)};
+
+    % Particle with emmited boson:
+    \vertex (right4) at (0,3) {\(c\)};
+    \vertex (center4) at (2,3);
+    \vertex (left4) at (4,3) {\(d\)};
+
+    % Generated particles:
+    \vertex (center3) at (3,1.5);
+    \vertex (left2) at (4,2) {\(\bar{d}\)};
+    \vertex (left3) at (4,1) {\(u\)};
+    
+
+    
+    % Draw the Feynman diagram
+    \diagram* {
+      (right1) -- [anti fermion] (center1) -- [anti fermion] (left1),
+      (right4) -- [fermion] (center4) -- [fermion] (left4),
+      (center4) -- [boson, edge label=\(W^+\)] (center3),
+      (center3) -- [anti fermion] (left2),
+      (center3) -- [fermion] (left3),
+    };
+  \end{feynman}
+  
+  % TIME AXIS
+\draw[->, thin] (-1,-1.5) -- (5.5,-1.5) node[midway, below] {t};
+\end{tikzpicture}
+
+\end{document}

@@ -35,12 +35,12 @@
 # STEPS
 
 [ ] Step 9: Polish
-	[ ] !!!!! Complex particles 
+	[X] !!!!! Complex particles 
 	[X]	Unify the symbol in .json. greek letters or latex code?
 		[X] Add property to .json for LaTeX symbols
 	[ ]	Support synonyms (e+, positron)
 	[ ] Update template.tex
-	[ ]	Add more particles/interactions to particles.json
+	[X]	Add more particles/interactions to particles.json
 	[ ] Add identifier of reactions
 		[ ] Add support for different processes in .tex
 	[ ] Pygame or tkinter GUI (interfaz)

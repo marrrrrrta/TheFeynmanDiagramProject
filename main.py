@@ -1,6 +1,6 @@
 # Entry point (CLI or GUI launcher)
 
-from src.particles import load_particles
+from src.particles import load_ElementalParticles
 from src.parser import parse_reaction
 from src.parser import normalize_particles
 from src.validator import validate_process
@@ -20,7 +20,7 @@ def main():
         return
 
     # Load the particles databasee+
-    particles_db = load_particles()
+    particles_db = load_ElementalParticles()
     
     # Normalize the particles in the reaction
     try:
