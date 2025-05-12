@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\tikzfeynmanset{warn luatex=false}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{feynman}
+    {% for line in vertices %}
+      \vertex ({{ line.name }}) at ({{ line.position }}) {\({{ line.label }}\)};
+    {% endfor %}
+
+    \diagram* {
+      {% for edge in edges %}
+        ({{ edge.start }}) -- [{{ edge.type }}{{ ', edge label=' + edge.label if edge.label }}] ({{ edge.end }}),
+      {% endfor %}
+    };
+  \end{feynman}
+  
+\draw[->, thin] (-1,-1.5) -- (5.5,-1.5) node[midway, below] {t};
+\end{tikzpicture}
+
+\end{document}

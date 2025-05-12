@@ -33,10 +33,12 @@ def validate_process(reaction, particles_db):
         errors.append(f"Process FORBIDDEN due to baryon number conservation: {baryon_initial} != {baryon_final}")
     
     # 3. LEPTON NUMBER CONSERVATION (L)
-    lepton_initial = sum_attributes(reaction["initial"], "lepton_number")
-    lepton_final = sum_attributes(reaction["final"], "lepton_number")
-    if lepton_initial != lepton_final:
-        errors.append(f"Process FORBIDDEN due to lepton number conservation: {lepton_initial} != {lepton_final}")
+    for lepton_type in ["le_number", "lmu_number", "tau_number"]:
+        lepton_initial = sum_attributes(reaction["initial"], lepton_type)
+        lepton_final = sum_attributes(reaction["final"], lepton_type)
+        if lepton_initial != lepton_final:
+            errors.append(f"Process FORBIDDEN due to {lepton_type} conservation: {lepton_initial} != {lepton_final}")
+    
     
     # 4. MASS CONSERVATION
     mass_initial = sum_attributes(reaction["initial"], "mass")

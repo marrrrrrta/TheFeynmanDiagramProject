@@ -1,8 +1,9 @@
 # Entry point (CLI or GUI launcher)
 
-from src.particles import load_ElementalParticles
+from src.particles import load_ElementalParticles, load_ComplexParticles
 from src.parser import parse_reaction
 from src.parser import normalize_particles
+from src.parser import analyze_complex_particles
 from src.validator import validate_process
 from src.diagram_generator import generate_tikz
 
@@ -19,18 +20,26 @@ def main():
         print(f"Error parsing reaction: {e}")
         return
 
-    # Load the particles databasee+
-    particles_db = load_ElementalParticles()
+    # Separate the complex particles into elemental particles
+    try:
+        parsed = analyze_complex_particles(parsed)
+    except Exception as e:
+        print(f"Error analyzing complex particles: {e}")
+        return
+
+    # Load the particles database
+    ElementalParticles_db = load_ElementalParticles()
+    ComplexParticles_db = load_ComplexParticles()
     
     # Normalize the particles in the reaction
     try:
-        normalized = normalize_particles(parsed, particles_db)
+        normalized = normalize_particles(parsed, ElementalParticles_db, ComplexParticles_db)
     except Exception as e:
         print(f"Error normalizing particles: {e}")
         return
     
     # Validate the reaction
-    errors = validate_process(normalized, particles_db)
+    errors = validate_process(normalized, ElementalParticles_db)
     if errors:
         print("This process is not allowed due to the following errors:")
         for error in errors:

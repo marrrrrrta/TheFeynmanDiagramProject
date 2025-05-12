@@ -1,6 +1,6 @@
 import unittest
 from src.validator import validate_process
-from src.particles import load_ElementalParticles
+from src.particles import load_ElementalParticles, load_ComplexParticles
 from src.parser import normalize_particles
 
 # Checks if:
@@ -9,21 +9,22 @@ from src.parser import normalize_particles
 
 class TestValidator(unittest.TestCase):
     def test_validate_process(self):
-        particles_db = load_ElementalParticles("data/particles.json")
+        elemental_db = load_ElementalParticles("data/ElementalParticles.json")
+        complex_db = load_ComplexParticles("data/ComplexParticles.json")
         reaction1 = {
             "initial": ["e+", "e-"],
             "final": ["e+", "e-"]
         }
         reaction2 = {
             "initial": ["e+", "e+"],
-            "final": ["μ+", "μ-"]
+            "final": ["mu+", "mu-"]
         }
         # Normalize both reactions first
-        reaction1 = normalize_particles(reaction1, particles_db)
-        reaction2 = normalize_particles(reaction2, particles_db)
+        reaction1 = normalize_particles(reaction1, elemental_db, complex_db)
+        reaction2 = normalize_particles(reaction2, elemental_db, complex_db)
         
-        errors1 = validate_process(reaction1, particles_db)
-        errors2 = validate_process(reaction2, particles_db)
+        errors1 = validate_process(reaction1, elemental_db)
+        errors2 = validate_process(reaction2, elemental_db)
         
         self.assertEqual(errors1, [])
         self.assertNotEqual(errors2, [])

@@ -38,7 +38,7 @@
 	[X] !!!!! Complex particles 
 	[X]	Unify the symbol in .json. greek letters or latex code?
 		[X] Add property to .json for LaTeX symbols
-	[ ]	Support synonyms (e+, positron)
+	[X]	Support synonyms (e+, positron)
 	[ ] Update template.tex
 	[X]	Add more particles/interactions to particles.json
 	[ ] Add identifier of reactions
