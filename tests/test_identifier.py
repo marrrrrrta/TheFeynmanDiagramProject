@@ -1,6 +1,8 @@
 import unittest
 from src.identifier import process_particles
 from src.identifier import identify_flavor_change
+from src.identifier import identify_strong
+from src.identifier import identify_em
 
 # Checks for:
 # - the reaction correctly identifies spectator and interacting particles
@@ -119,6 +121,129 @@ class TestIdentifyFlavorChange(unittest.TestCase):
         self.assertEqual(lepton_pairs, [('e-', 'nu_e')])
         self.assertEqual(interacting_final, interacting_expected)
         
-
+class TestIdentifyStrong(unittest.TestCase):
+    def setUp(self):
+        self.db = {
+            'u': {'baryon_number': 0.3333333333333333, 
+                  'family': 1,
+                  'charge': 0.6666666666666666,
+                  'symbol': 'u',
+                  'lepton_number': 0},
+            'd': {'baryon_number': 0.3333333333333333, 
+                  'family': 1,
+                  'charge': -0.3333333333333333,
+                  'symbol': 'd',
+                  'lepton_number': 0},
+            's': {'baryon_number': 0.3333333333333333,
+                  'family': 1,
+                  'charge': -0.3333333333333333,
+                  'symbol': 's',
+                  'lepton_number': 0},
+            'antiu': {'baryon_number': -0.3333333333333333, 
+                  'family': -1,
+                  'charge': -0.6666666666666666,
+                  'symbol': 'antiu',
+                  'lepton_number': 0},
+            'antid': {'baryon_number': -0.3333333333333333,
+                  'family': -1,
+                   'charge': 0.3333333333333333,
+                   'symbol': 'antid',
+                   'lepton_number': 0},
+        }
+        
+    def test_basic_strong(self):
+        interacting = {
+            'initial': ['u', 'd'],
+            'final': ['antiu', 'd', 'u']
+        }
+        interacting_expected = {
+            'initial': ['u', 'd'],
+            'final': ['d']
+        }
+        quark_pairs, interacting_final = identify_strong(interacting, self.db)
+        self.assertEqual(quark_pairs, [('antiu', 'u')])
+        self.assertEqual(interacting_final, interacting_expected)
+    
+    def test_no_strong(self):
+        interacting = {
+            'initial': ['u', 'd'],
+            'final': ['u', 'd']
+        }
+        interacting_expected = {
+            'initial': ['u', 'd'],
+            'final': ['u', 'd']
+        }
+        quark_pairs, interacting_final = identify_strong(interacting, self.db)
+        self.assertEqual(quark_pairs, [])
+        self.assertEqual(interacting_final, interacting_expected)
+    
+    def test_no_strong_with_antiparticles(self):
+        interacting = {
+            'initial': ['u', 'd'],
+            'final': ['antiu', 'antid']
+        }
+        interacting_expected = {
+            'initial': ['u', 'd'],
+            'final': ['antiu', 'antid']
+        }
+        quark_pairs, interacting_final = identify_strong(interacting, self.db)
+        self.assertEqual(quark_pairs, [])
+        self.assertEqual(interacting_final, interacting_expected)
+        
+        
+class TestIdentifyEM(unittest.TestCase):
+    def setUp(self):
+        self.db = {
+            'e-': {'baryon_number': 0, 
+                   'family': '1e', 
+                   'charge': -1,
+                   'symbol': 'e-',
+                   },
+            'e+': {'baryon_number': 0, 
+                   'family': '-1e', 
+                   'charge': 1,
+                   'symbol': 'e+',
+                   },
+            'u':{'baryon_number': 0.3333333333333333,
+                    'family': 1,
+                    'charge': 0.6666666666666666,
+                    'symbol': 'u',
+                    },
+            'antiu': {'baryon_number': -0.3333333333333333, 
+                   'family': -1,
+                   'charge': -0.6666666666666666,
+                   'symbol': 'antiu',
+                   },
+            }
+    
+    def test_basic_em(self):
+        interacting = {
+            'initial': ['e-', 'e+'],
+            'final': ['e+', 'antiu']
+        }
+        interacting_expected = {
+            'initial': [],
+            'final': ['e+','antiu']
+        }
+        initial_em, final_em, interacting_particles = identify_em(interacting, self.db)
+        self.assertEqual(initial_em, [('e-', 'e+')])
+        self.assertEqual(final_em, [])
+        self.assertEqual(interacting_particles, interacting_expected)
+    
+    def no_em(self):
+        interacting = {
+            'initial': ['e-', 'e-'],
+            'final': ['e+', 'e+']
+        }
+        interacting_expected = {
+            'initial': ['e-', 'e-'],
+            'final': ['e+', 'e+']
+        }
+        initial_em, final_em, interacting_particles = identify_em(interacting, self.db)
+        self.assertEqual(initial_em, [])
+        self.assertEqual(final_em, [])
+        self.assertEqual(interacting_particles, interacting_expected)
+ 
+        
 if __name__ == '__main__':
     unittest.main()

@@ -40,11 +40,11 @@ def validate_process(reaction, particles_db):
             errors.append(f"Process FORBIDDEN due to {lepton_type} conservation: {lepton_initial} != {lepton_final}")
     
     
-    # 4. MASS CONSERVATION
+    '''# 4. MASS CONSERVATION
     mass_initial = sum_attributes(reaction["initial"], "mass")
     mass_final = sum_attributes(reaction["final"], "mass")
     if mass_initial < mass_final:
-        errors.append(f"Process FORBIDDEN due to mass conservation: {mass_initial} < {mass_final}")
+        errors.append(f"Process FORBIDDEN due to mass conservation: {mass_initial} < {mass_final}")'''
     
     return errors
     
