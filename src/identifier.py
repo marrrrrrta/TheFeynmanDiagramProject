@@ -1,4 +1,3 @@
-from collections import Counter
 import re
 
 # Identifies which interaction is happening in the reaction. For that, we need to:
@@ -225,4 +224,66 @@ def identify_em(interacting_particles, ElementalParticles_db):
     }
     return initial_em, final_em, interacting_particles
         
+
+def identify_weak(interacting_particles, ElementalParticles_db):
+    """
+    Identifies weak interactions by checking for pairs in the initial and final states. It takes into account that:
+    - Baryons and leptons are treated differently
+    - Both particles must be either particles or antiparticles
+    - The charge must be equal 
+
+    Args:
+        interacting_particles (_type_): _description_
+        ElementalParticles_db (_type_): _description_
+    """    
+    initial = interacting_particles['initial']
+    final = interacting_particles['final']
+    
+    weak_pairs = []
+    initial_copy = initial.copy()
+    final_copy = final.copy()
+    
+    for p1 in initial:
+        for p2 in final:
+            if p1 not in initial_copy or p2 not in final_copy:
+                # If the particle has already been used, skip it
+                continue
+            
+            # For every pair of two particles in initial and final states
+            ## BARYONS
+            if (
+                ElementalParticles_db[p1]['baryon_number'] != 0 
+                and ElementalParticles_db[p2]['baryon_number'] != 0
+            ):
+                # If both particles are baryons
+                if (
+                    ElementalParticles_db[p1]['family'] * ElementalParticles_db[p2]['family'] > 0
+                    and (ElementalParticles_db[p1]['charge'] == ElementalParticles_db[p2]['charge'])
+                ):
+                    # If both particles are either particles or antiparticles
+                    initial_copy.remove(p1)
+                    final_copy.remove(p2)
+                    weak_pairs.append((p1, p2))
+            
+            ## LEPTONS
+            if (
+                ElementalParticles_db[p1]['baryon_number'] == 0
+                and ElementalParticles_db[p2]['baryon_number'] == 0
+            ):
+                # If both particles are leptons
+                if (
+                    ElementalParticles_db[p1]['family'].startswith('-') == ElementalParticles_db[p2]['family'].startswith('-')
+                    and (ElementalParticles_db[p1]['charge'] == ElementalParticles_db[p2]['charge'])
+                ):
+                    # If both particles are leptons and are either particles or antiparticles
+                    initial_copy.remove(p1)
+                    final_copy.remove(p2)
+                    weak_pairs.append((p1, p2))
+    
+    interacting_particles = {
+        'initial': initial_copy,
+        'final': final_copy
+    }
+    return weak_pairs, interacting_particles
+
 

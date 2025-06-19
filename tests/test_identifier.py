@@ -3,6 +3,7 @@ from src.identifier import process_particles
 from src.identifier import identify_flavor_change
 from src.identifier import identify_strong
 from src.identifier import identify_em
+from src.identifier import identify_weak
 
 # Checks for:
 # - the reaction correctly identifies spectator and interacting particles
@@ -244,6 +245,56 @@ class TestIdentifyEM(unittest.TestCase):
         self.assertEqual(final_em, [])
         self.assertEqual(interacting_particles, interacting_expected)
  
+class TestIdentifyWeak(unittest.TestCase):    
+    def setUp(self):
+        self.db = {
+            'e-': {'baryon_number': 0, 
+                   'family': '1e', 
+                   'charge': -1,
+                   'symbol': 'e-',
+                   },
+            'e+': {'baryon_number': 0, 
+                   'family': '-1e', 
+                   'charge': 1,
+                   'symbol': 'e+',
+                   },
+            'u':{'baryon_number': 0.3333333333333333,
+                    'family': 1,
+                    'charge': 0.6666666666666666,
+                    'symbol': 'u',
+                    },
+            'antiu': {'baryon_number': -0.3333333333333333, 
+                   'family': -1,
+                   'charge': -0.6666666666666666,
+                   'symbol': 'antiu',
+                   },
+            }
         
+    def test_basic_weak(self):
+        interacting = {
+            'initial': ['e-', 'u'],
+            'final': ['e-', 'antiu']
+        }
+        interacting_expected = {
+            'initial': ['u'],
+            'final': ['antiu']
+        }
+        weak_pairs, interacting_particles = identify_weak(interacting, self.db)
+        self.assertEqual(weak_pairs, [('e-', 'e-')])
+        self.assertEqual(interacting_particles, interacting_expected)
+    
+    def test_no_weak(self):
+        interacting = {
+            'initial': ['e-', 'antiu'],
+            'final': ['e+', 'u']
+        }
+        interacting_expected = {
+            'initial': ['e-', 'antiu'],
+            'final': ['e+', 'u']
+        }
+        weak_pairs, interacting_particles = identify_weak(interacting, self.db)
+        self.assertEqual(weak_pairs, [])
+        self.assertEqual(interacting_particles, interacting_expected)
+
 if __name__ == '__main__':
     unittest.main()
