@@ -53,7 +53,7 @@ def identify_flavor_change(interacting_particles, ElementalParticles_db):
         leptons = []
         quarks = []
         for p in particles:
-            if ElementalParticles_db[p]['baryon_number'] == 0:
+            if ElementalParticles_db[p].baryon_number == 0:
                 leptons.append(p)
             else:
                 quarks.append(p)
@@ -70,11 +70,11 @@ def identify_flavor_change(interacting_particles, ElementalParticles_db):
             if p2 in used_final_quarks:
                 # If the quark has already been used in a flavor change, skip it
                 continue
-            if ElementalParticles_db[p1]['baryon_number'] == ElementalParticles_db[p2]['baryon_number']:
+            if ElementalParticles_db[p1].baryon_number == ElementalParticles_db[p2].baryon_number:
                 # Only pairs of particle/particle and antiparticle/antiparticle go through
-                if ElementalParticles_db[p1]['charge'] != ElementalParticles_db[p2]['charge']:
+                if ElementalParticles_db[p1].charge != ElementalParticles_db[p2].charge:
                     # If there they have different charge, they can have a flavor change
-                    if ElementalParticles_db[p1]['symbol'] != ElementalParticles_db[p2]['symbol']:
+                    if ElementalParticles_db[p1].symbol != ElementalParticles_db[p2].symbol:
                         # If they have different symbols, they have a flavor change
                         quark_flavor_pairs.append((p1, p2))
                         used_final_quarks.add(p2)
@@ -90,17 +90,17 @@ def identify_flavor_change(interacting_particles, ElementalParticles_db):
             if p2 in used_final_leptons:
                 # If the lepton has already been used in a flavor change, skip it
                 continue
-            if ElementalParticles_db[p1]['lepton_number'] == ElementalParticles_db[p2]['lepton_number']:
-                # Only pairs of particle/particle and antiparticle/antiparticle go through
-                fam1 = re.sub(r'[^a-z]', '', ElementalParticles_db[p1]['family'])
-                fam2 = re.sub(r'[^a-z]', '', ElementalParticles_db[p2]['family'])
-                if fam1 == fam2 and ElementalParticles_db[p1]['symbol'] != ElementalParticles_db[p2]['symbol']:
-                    # If they are from the same family and have different symbols, they have a flavor change
-                    lepton_flavor_pairs.append((p1, p2))
-                    used_final_leptons.add(p2)
-                    if p1 in initial_copy: initial_copy.remove(p1)
-                    if p2 in final_copy: final_copy.remove(p2)
-                    break
+            
+            # Only pairs of particle/particle and antiparticle/antiparticle go through
+            fam1 = re.sub(r'[^a-z]', '', str(ElementalParticles_db[p1].family))
+            fam2 = re.sub(r'[^a-z]', '', str(ElementalParticles_db[p2].family))
+            if fam1 == fam2 and ElementalParticles_db[p1].symbol != ElementalParticles_db[p2].symbol:
+                # If they are from the same family and have different symbols, they have a flavor change
+                lepton_flavor_pairs.append((p1, p2))
+                used_final_leptons.add(p2)
+                if p1 in initial_copy: initial_copy.remove(p1)
+                if p2 in final_copy: final_copy.remove(p2)
+                break
     
     interacting_particles = {
             'initial' : initial_copy,
@@ -124,7 +124,7 @@ def identify_strong(interacting_particles, ElementalParticles_db):
 
     # Only keep quarks in final
     def is_quark(p):
-        return ElementalParticles_db[p]['baryon_number'] != 0
+        return ElementalParticles_db[p].baryon_number != 0
 
     final_quarks = [p for p in final if is_quark(p)]
     used_final_quarks = set()
@@ -138,9 +138,9 @@ def identify_strong(interacting_particles, ElementalParticles_db):
                 # Check if they are unused
                 continue
             if (
-                ElementalParticles_db[p1]['baryon_number'] == -ElementalParticles_db[p2]['baryon_number']
-                and abs(ElementalParticles_db[p1]['charge']) == abs(ElementalParticles_db[p2]['charge'])
-                and abs(ElementalParticles_db[p1]['family']) == abs(ElementalParticles_db[p2]['family'])
+                ElementalParticles_db[p1].baryon_number == -ElementalParticles_db[p2].baryon_number
+                and abs(ElementalParticles_db[p1].charge) == abs(ElementalParticles_db[p2].charge)
+                and abs(ElementalParticles_db[p1].family) == abs(ElementalParticles_db[p2].family)
             ):
                 # If they are a particle/antiparticle pair, they can have a strong interaction
                 quark_pairs.append((p1, p2))
@@ -174,8 +174,8 @@ def identify_em(interacting_particles, ElementalParticles_db):
     final = interacting_particles['final']
     
     # Check if there are charged particles in the initial and final states    
-    initial_charged = [p for p in initial if ElementalParticles_db[p]['charge'] != 0]
-    final_charged = [p for p in final if ElementalParticles_db[p]['charge'] != 0]
+    initial_charged = [p for p in initial if ElementalParticles_db[p].charge != 0]
+    final_charged = [p for p in final if ElementalParticles_db[p].charge != 0]
     
     def check_pairs(particles):
         em_pairs = []
@@ -190,9 +190,9 @@ def identify_em(interacting_particles, ElementalParticles_db):
                     continue
                 # LEPTONS
                 if (
-                    ElementalParticles_db[p1]['baryon_number'] == 0 and ElementalParticles_db[p2]['baryon_number'] == 0
-                    and re.sub(r'[^a-z]', '', ElementalParticles_db[p1]['family']) == re.sub(r'[^a-z]', '', ElementalParticles_db[p2]['family'])
-                    and ElementalParticles_db[p1]['charge'] + ElementalParticles_db[p2]['charge'] == 0
+                    ElementalParticles_db[p1].baryon_number == 0 and ElementalParticles_db[p2].baryon_number == 0
+                    and re.sub(r'[^a-z]', '', str(ElementalParticles_db[p1].family)) == re.sub(r'[^a-z]', '', str(ElementalParticles_db[p2].family))
+                    and ElementalParticles_db[p1].charge + ElementalParticles_db[p2].charge == 0
                     ):
                     # If both particles are leptons, are from the same family and their charges cancel each other
                     em_pairs.append((p1, p2))
@@ -201,9 +201,9 @@ def identify_em(interacting_particles, ElementalParticles_db):
                 
                 # QUARKS
                 if (
-                    ElementalParticles_db[p1]['baryon_number'] != 0 and ElementalParticles_db[p2]['baryon_number'] != 0
-                    and abs(ElementalParticles_db[p1]['family']) == abs(ElementalParticles_db[p2]['family'])
-                    and ElementalParticles_db[p1]['charge'] + ElementalParticles_db[p2]['charge'] == 0
+                    ElementalParticles_db[p1].baryon_number != 0 and ElementalParticles_db[p2].baryon_number != 0
+                    and abs(ElementalParticles_db[p1].family) == abs(ElementalParticles_db[p2].family)
+                    and ElementalParticles_db[p1].charge + ElementalParticles_db[p2].charge == 0
                     ):
                     # If both particles are quarks, are from the same family and their charges cancel each other
                     em_pairs.append((p1, p2))
@@ -252,13 +252,13 @@ def identify_weak(interacting_particles, ElementalParticles_db):
             # For every pair of two particles in initial and final states
             ## BARYONS
             if (
-                ElementalParticles_db[p1]['baryon_number'] != 0 
-                and ElementalParticles_db[p2]['baryon_number'] != 0
+                ElementalParticles_db[p1].baryon_number != 0 
+                and ElementalParticles_db[p2].baryon_number != 0
             ):
                 # If both particles are baryons
                 if (
-                    ElementalParticles_db[p1]['family'] * ElementalParticles_db[p2]['family'] > 0
-                    and (ElementalParticles_db[p1]['charge'] == ElementalParticles_db[p2]['charge'])
+                    ElementalParticles_db[p1].family * ElementalParticles_db[p2].family > 0
+                    and (ElementalParticles_db[p1].charge == ElementalParticles_db[p2].charge)
                 ):
                     # If both particles are either particles or antiparticles
                     initial_copy.remove(p1)
@@ -267,13 +267,13 @@ def identify_weak(interacting_particles, ElementalParticles_db):
             
             ## LEPTONS
             if (
-                ElementalParticles_db[p1]['baryon_number'] == 0
-                and ElementalParticles_db[p2]['baryon_number'] == 0
+                ElementalParticles_db[p1].baryon_number == 0
+                and ElementalParticles_db[p2].baryon_number == 0
             ):
                 # If both particles are leptons
                 if (
-                    ElementalParticles_db[p1]['family'].startswith('-') == ElementalParticles_db[p2]['family'].startswith('-')
-                    and (ElementalParticles_db[p1]['charge'] == ElementalParticles_db[p2]['charge'])
+                    str(ElementalParticles_db[p1].family.startswith('-')) == str(ElementalParticles_db[p2].family.startswith('-'))
+                    and (ElementalParticles_db[p1].charge == ElementalParticles_db[p2].charge)
                 ):
                     # If both particles are leptons and are either particles or antiparticles
                     initial_copy.remove(p1)

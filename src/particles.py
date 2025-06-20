@@ -10,7 +10,7 @@ class ElementalParticle:
         self.mass = float(data.get("mass", 0)) 
         self.spin = float(data.get("spin", 0))
         self.charge = float(data.get("charge", 0))  
-        self.baryon_number = int(data.get("baryon_number", 0))
+        self.baryon_number = float(data.get("baryon_number", 0))
         self.le_number = int(data.get("le_number", 0))
         self.lmu_number = int(data.get("lmu_number", 0))
         self.tau_number = int(data.get("tau_number", 0))

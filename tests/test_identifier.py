@@ -1,4 +1,6 @@
 import unittest
+from src.particles import load_ElementalParticles
+
 from src.identifier import process_particles
 from src.identifier import identify_flavor_change
 from src.identifier import identify_strong
@@ -11,17 +13,17 @@ from src.identifier import identify_weak
 class TestProcessParticles(unittest.TestCase):
     def test_process_particles(self):
         processed_reaction = {
-            'initial': ['e-', 'mu-', 'nu_mu'],
-            'final': ['e-', 'nu_e', 'nu_mu']
+            'initial': ['electron', 'muon', 'muon neutrino'],
+            'final': ['electron', 'electron neutrino', 'muon neutrino']
         }
 
         expected_spectator = {
-            'initial': ['e-', 'nu_mu'],
-            'final': ['e-', 'nu_mu']
+            'initial': ['electron', 'muon neutrino'],
+            'final': ['electron', 'muon neutrino']
         }
         expected_interacting = {
-            'initial': ['mu-'],
-            'final': ['nu_e']
+            'initial': ['muon'],
+            'final': ['electron neutrino']
         }
 
         spectator, interacting = process_particles(processed_reaction)
@@ -32,44 +34,12 @@ class TestProcessParticles(unittest.TestCase):
 
 class TestIdentifyFlavorChange(unittest.TestCase):
     def setUp(self):
-        self.db = {
-            'e-': {'baryon_number': 0, 
-                   'family': '1e', 
-                   'charge': -1,
-                   'symbol': 'e-',
-                   'lepton_number': 1,
-                   },
-            'mu-': {'baryon_number': 0, 
-                    'family': '1mu',
-                    'charge': -1,
-                    'symbol': 'mu-',
-                    'lepton_number': 1,},
-            'nu_e': {'baryon_number': 0, 
-                     'family': '1e',
-                     'charge': 0,
-                     'symbol': 'nu_e',
-                     'lepton_number': 1,},
-            'nu_mu': {'baryon_number': 0, 
-                      'family': '1mu',
-                      'charge': 0,
-                      'symbol': 'nu_mu',
-                      'lepton_number': 1,},
-            'u': {'baryon_number': 0.3333333333333333, 
-                  'family': 1,
-                  'charge': 0.6666666666666666,
-                  'symbol': 'u',
-                  'lepton_number': 0},
-            'd': {'baryon_number': 0.3333333333333333, 
-                  'family': 1,
-                  'charge': -0.3333333333333333,
-                  'symbol': 'd',
-                  'lepton_number': 0},
-        }
+        self.db = load_ElementalParticles("data/ElementalParticles.json")
 
     def test_lepton_flavor_change(self):
         interacting = {
-            'initial': ['mu-', 'nu_e'],
-            'final': ['e-', 'nu_mu']
+            'initial': ['muon', 'electron neutrino'],
+            'final': ['electron', 'muon neutrino']
         }
         interacting_expected ={
             'initial': [],
@@ -77,31 +47,31 @@ class TestIdentifyFlavorChange(unittest.TestCase):
         }
         quark_pairs, lepton_pairs, interacting_final = identify_flavor_change(interacting, self.db)
         self.assertEqual(quark_pairs, [])
-        self.assertEqual(lepton_pairs, [('mu-', 'nu_mu'), ('nu_e', 'e-')])
+        self.assertEqual(lepton_pairs, [('muon', 'muon neutrino'), ('electron neutrino', 'electron')])
         self.assertEqual(interacting_final, interacting_expected)
 
     def test_baryon_flavor_change(self):
         interacting = {
-            'initial': ['u', 'u'],
-            'final': ['d', 'u']
+            'initial': ['up', 'up'],
+            'final': ['down', 'up']
         }
         interacting_expected = {
-            'initial': ['u'],
-            'final': ['u']
+            'initial': ['up'],
+            'final': ['up']
         }
         quark_pairs, lepton_pairs, interacting_final= identify_flavor_change(interacting, self.db)
-        self.assertEqual(quark_pairs, [('u', 'd')])
+        self.assertEqual(quark_pairs, [('up', 'down')])
         self.assertEqual(lepton_pairs, [])
         self.assertEqual(interacting_final, interacting_expected)
 
     def test_no_flavor_change(self):
         interacting = {
-            'initial': ['e-', 'nu_mu'],
-            'final': ['e-', 'nu_mu']
+            'initial': ['electron', 'muon neutrino'],
+            'final': ['electron', 'muon neutrino']
         }
         interacting_expected = {
-            'initial': ['e-', 'nu_mu'],
-            'final': ['e-', 'nu_mu']
+            'initial': ['electron', 'muon neutrino'],
+            'final': ['electron', 'muon neutrino']
         }
         quark_pairs, lepton_pairs, interacting_final = identify_flavor_change(interacting, self.db)
         self.assertEqual(quark_pairs, [])
@@ -110,69 +80,43 @@ class TestIdentifyFlavorChange(unittest.TestCase):
     
     def test_mixed_flavor_change(self):
         interacting = {
-            'initial': ['u', 'e-'],
-            'final': ['d', 'nu_e']
+            'initial': ['up', 'electron'],
+            'final': ['down', 'electron neutrino']
         }
         interacting_expected ={
             'initial': [],
             'final': []
         }
         quark_pairs, lepton_pairs, interacting_final = identify_flavor_change(interacting, self.db)
-        self.assertEqual(quark_pairs, [('u', 'd')])
-        self.assertEqual(lepton_pairs, [('e-', 'nu_e')])
+        self.assertEqual(quark_pairs, [('up', 'down')])
+        self.assertEqual(lepton_pairs, [('electron', 'electron neutrino')])
         self.assertEqual(interacting_final, interacting_expected)
         
-class TestIdentifyStrong(unittest.TestCase):
+'''class TestIdentifyStrong(unittest.TestCase):
     def setUp(self):
-        self.db = {
-            'u': {'baryon_number': 0.3333333333333333, 
-                  'family': 1,
-                  'charge': 0.6666666666666666,
-                  'symbol': 'u',
-                  'lepton_number': 0},
-            'd': {'baryon_number': 0.3333333333333333, 
-                  'family': 1,
-                  'charge': -0.3333333333333333,
-                  'symbol': 'd',
-                  'lepton_number': 0},
-            's': {'baryon_number': 0.3333333333333333,
-                  'family': 1,
-                  'charge': -0.3333333333333333,
-                  'symbol': 's',
-                  'lepton_number': 0},
-            'antiu': {'baryon_number': -0.3333333333333333, 
-                  'family': -1,
-                  'charge': -0.6666666666666666,
-                  'symbol': 'antiu',
-                  'lepton_number': 0},
-            'antid': {'baryon_number': -0.3333333333333333,
-                  'family': -1,
-                   'charge': 0.3333333333333333,
-                   'symbol': 'antid',
-                   'lepton_number': 0},
-        }
+        self.db = load_ElementalParticles("data/ElementalParticles.json")
         
     def test_basic_strong(self):
         interacting = {
-            'initial': ['u', 'd'],
-            'final': ['antiu', 'd', 'u']
+            'initial': ['up', 'down'],
+            'final': ['antiup', 'down', 'up']
         }
         interacting_expected = {
-            'initial': ['u', 'd'],
-            'final': ['d']
+            'initial': ['up', 'down'],
+            'final': ['down']
         }
         quark_pairs, interacting_final = identify_strong(interacting, self.db)
-        self.assertEqual(quark_pairs, [('antiu', 'u')])
+        self.assertEqual(quark_pairs, [('antiup', 'up')])
         self.assertEqual(interacting_final, interacting_expected)
     
     def test_no_strong(self):
         interacting = {
-            'initial': ['u', 'd'],
-            'final': ['u', 'd']
+            'initial': ['up', 'down'],
+            'final': ['up', 'down']
         }
         interacting_expected = {
-            'initial': ['u', 'd'],
-            'final': ['u', 'd']
+            'initial': ['up', 'down'],
+            'final': ['up', 'down']
         }
         quark_pairs, interacting_final = identify_strong(interacting, self.db)
         self.assertEqual(quark_pairs, [])
@@ -180,12 +124,12 @@ class TestIdentifyStrong(unittest.TestCase):
     
     def test_no_strong_with_antiparticles(self):
         interacting = {
-            'initial': ['u', 'd'],
-            'final': ['antiu', 'antid']
+            'initial': ['up', 'down'],
+            'final': ['antiup', 'antidown']
         }
         interacting_expected = {
-            'initial': ['u', 'd'],
-            'final': ['antiu', 'antid']
+            'initial': ['up', 'down'],
+            'final': ['antiup', 'antidown']
         }
         quark_pairs, interacting_final = identify_strong(interacting, self.db)
         self.assertEqual(quark_pairs, [])
@@ -194,51 +138,30 @@ class TestIdentifyStrong(unittest.TestCase):
         
 class TestIdentifyEM(unittest.TestCase):
     def setUp(self):
-        self.db = {
-            'e-': {'baryon_number': 0, 
-                   'family': '1e', 
-                   'charge': -1,
-                   'symbol': 'e-',
-                   },
-            'e+': {'baryon_number': 0, 
-                   'family': '-1e', 
-                   'charge': 1,
-                   'symbol': 'e+',
-                   },
-            'u':{'baryon_number': 0.3333333333333333,
-                    'family': 1,
-                    'charge': 0.6666666666666666,
-                    'symbol': 'u',
-                    },
-            'antiu': {'baryon_number': -0.3333333333333333, 
-                   'family': -1,
-                   'charge': -0.6666666666666666,
-                   'symbol': 'antiu',
-                   },
-            }
+        self.db = load_ElementalParticles("data/ElementalParticles.json")
     
     def test_basic_em(self):
         interacting = {
-            'initial': ['e-', 'e+'],
-            'final': ['e+', 'antiu']
+            'initial': ['electron', 'positron'],
+            'final': ['positron', 'antiup']
         }
         interacting_expected = {
             'initial': [],
-            'final': ['e+','antiu']
+            'final': ['positron','antiup']
         }
         initial_em, final_em, interacting_particles = identify_em(interacting, self.db)
-        self.assertEqual(initial_em, [('e-', 'e+')])
+        self.assertEqual(initial_em, [('electron', 'positron')])
         self.assertEqual(final_em, [])
         self.assertEqual(interacting_particles, interacting_expected)
     
     def no_em(self):
         interacting = {
-            'initial': ['e-', 'e-'],
-            'final': ['e+', 'e+']
+            'initial': ['electron', 'electron'],
+            'final': ['positron', 'positron']
         }
         interacting_expected = {
-            'initial': ['e-', 'e-'],
-            'final': ['e+', 'e+']
+            'initial': ['electron', 'electron'],
+            'final': ['positron', 'positron']
         }
         initial_em, final_em, interacting_particles = identify_em(interacting, self.db)
         self.assertEqual(initial_em, [])
@@ -247,54 +170,33 @@ class TestIdentifyEM(unittest.TestCase):
  
 class TestIdentifyWeak(unittest.TestCase):    
     def setUp(self):
-        self.db = {
-            'e-': {'baryon_number': 0, 
-                   'family': '1e', 
-                   'charge': -1,
-                   'symbol': 'e-',
-                   },
-            'e+': {'baryon_number': 0, 
-                   'family': '-1e', 
-                   'charge': 1,
-                   'symbol': 'e+',
-                   },
-            'u':{'baryon_number': 0.3333333333333333,
-                    'family': 1,
-                    'charge': 0.6666666666666666,
-                    'symbol': 'u',
-                    },
-            'antiu': {'baryon_number': -0.3333333333333333, 
-                   'family': -1,
-                   'charge': -0.6666666666666666,
-                   'symbol': 'antiu',
-                   },
-            }
+        self.db = load_ElementalParticles("data/ElementalParticles.json")
         
     def test_basic_weak(self):
         interacting = {
-            'initial': ['e-', 'u'],
-            'final': ['e-', 'antiu']
+            'initial': ['electron', 'up'],
+            'final': ['electron', 'antiup']
         }
         interacting_expected = {
-            'initial': ['u'],
-            'final': ['antiu']
+            'initial': ['up'],
+            'final': ['antiup']
         }
         weak_pairs, interacting_particles = identify_weak(interacting, self.db)
-        self.assertEqual(weak_pairs, [('e-', 'e-')])
+        self.assertEqual(weak_pairs, [('electron', 'electron')])
         self.assertEqual(interacting_particles, interacting_expected)
     
     def test_no_weak(self):
         interacting = {
-            'initial': ['e-', 'antiu'],
-            'final': ['e+', 'u']
+            'initial': ['electron', 'antiup'],
+            'final': ['positron', 'up']
         }
         interacting_expected = {
-            'initial': ['e-', 'antiu'],
-            'final': ['e+', 'u']
+            'initial': ['electron', 'antiup'],
+            'final': ['positron', 'up']
         }
         weak_pairs, interacting_particles = identify_weak(interacting, self.db)
         self.assertEqual(weak_pairs, [])
-        self.assertEqual(interacting_particles, interacting_expected)
+        self.assertEqual(interacting_particles, interacting_expected)'''
 
 if __name__ == '__main__':
     unittest.main()

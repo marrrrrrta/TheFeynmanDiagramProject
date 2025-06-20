@@ -1,4 +1,4 @@
-# Applies conservatino laws and interaction rules
+# Applies conservation laws and interaction rules
 
 def validate_process(reaction, particles_db):
     """
@@ -18,7 +18,13 @@ def validate_process(reaction, particles_db):
     
     # Sums all the attributes of initial and final particles
     def sum_attributes(particles, attribute):
-        return sum(getattr(particles_db[p], attribute) for p in particles)
+        """Sum the given attribute for all particles in the list"""
+        total = 0
+        for p in particles:
+            particle = particles_db[p]
+            if hasattr(particle, attribute):
+                total += getattr(particle, attribute)
+        return total
     
     # 1. ELECTRIC CHARGE CONSERVATION (Q)
     charge_initial = sum_attributes(reaction["initial"], "charge")
@@ -41,11 +47,10 @@ def validate_process(reaction, particles_db):
     
     
     # 4. MASS CONSERVATION
-    mass_initial = sum_attributes(reaction["initial"], "mass")
-    mass_final = sum_attributes(reaction["final"], "mass")
-    
     # Only check mass conservation if there is a single initial particle 
     if len(reaction["initial"]) == 1:
+        mass_initial = sum_attributes(reaction["initial"], "mass")
+        mass_final = sum_attributes(reaction["final"], "mass")  
         if mass_initial < mass_final:
             errors.append(f"Process FORBIDDEN due to mass conservation: {mass_initial} < {mass_final}")
     
