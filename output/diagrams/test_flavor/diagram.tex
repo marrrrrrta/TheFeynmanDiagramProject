@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{physics}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows.meta}
+
+\begin{document}
+
+\begin{tikzpicture}[
+  fermion/.style={draw=black, postaction={decorate}, decoration={markings,mark=at position .55 with {\arrow[black]{>}}}},
+  antifermion/.style={draw=black, postaction={decorate}, decoration={markings,mark=at position .55 with {\arrow[black]{<}}}},
+  photon/.style={decorate, decoration={snake}, draw=black},
+  gluon/.style={decorate, decoration={coil, amplitude=4pt, segment length=5pt}, draw=black},
+  weak/.style={decorate, decoration={snake, amplitude=1pt}, draw=black},
+  time axis/.style={->, thick, draw=black, dashed}
+]
+
+% Time axis
+\draw[time axis] (-1,-2) -- (10,-2) node[right] {$t$};
+
+%% SPECTATOR PARTICLES
+% Spectator particles (straight horizontal lines at the top)
+
+
+% Position counter for interactions (starts below spectators)
+
+
+%% FLAVOR CHANGING INTERACTIONS
+
+  
+  
+  % Quark flavor changes
+  
+  
+  % Lepton flavor changes
+  
+    \coordinate (fl_in1) at (2,1.5);
+    \coordinate (fl_out1) at (8,1.5);
+    \coordinate (fl_mid1) at (5,1.5);
+    \coordinate (fl_exchange1) at (5,2.3);
+    
+    \draw[fermion] (fl_in1) -- (fl_mid1);
+    \draw[fermion] (fl_mid1) -- (fl_out1);
+    \draw[weak] (fl_mid1) -- (fl_exchange1) node[above] {$W^\pm$};
+    
+    \node[left] at (fl_in1) {$muon$};
+    \node[right] at (fl_out1) {$electron$};
+    
+    
+  
+
+
+%% STRONG INTERACTIONS
+
+
+%% EM INTERACTIONS
+
+
+%% WEAK INTERACTIONS
+
+
+\end{tikzpicture}
+
+\end{document}

@@ -9,7 +9,7 @@ from src.identifier import (
     identify_em,
     identify_weak
 )
-from src.diagram_generator import generate_tikz
+from src.diagram_generator import generate_advanced_diagram
 
 def main():
     print("Welcome to the Feynman Diagrams Project!")
@@ -94,11 +94,32 @@ def main():
         print(f"Initial: {updated_interacting['initial']}, Final: {updated_interacting['final']}")
 
     # Step 6: Generate diagram
-    try:
-        generate_tikz(elemental_reaction, output_dir="output/diagrams")
-        print("Feynman diagram generated.")
-    except Exception as e:
-        print(f"Error generating diagram: {e}")
+    interactions = {
+        'flavor_change': {
+            'quark_pairs': quark_flavor_pairs,
+            'lepton_pairs': lepton_flavor_pairs
+        },
+        'strong': {
+            'quark_pairs': quark_pairs
+        },
+        'em': {
+            'initial_pairs': initial_em,
+            'final_pairs': final_em
+        },
+        'weak': {
+            'pairs': weak_pairs
+        }
+    }
+    
+    generation = input("Do you want to generate a Feynman diagram? (yes/no): ").strip().lower()
+    if generation == 'yes':
+        try:
+            generate_advanced_diagram(spectator, interactions, output_dir="output/diagrams")
+            print("Feynman diagram generated successfully!")
+        except Exception as e:
+            print(f"Error generating diagram: {e}")
+    else:
+        print("Diagram generation skipped.")
 
 if __name__ == "__main__":
     main()

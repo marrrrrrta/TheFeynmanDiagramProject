@@ -1,1 +1,0 @@
-# Runs LaTeX and generates the final output

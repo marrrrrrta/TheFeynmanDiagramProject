@@ -4,45 +4,61 @@ from jinja2 import Environment, FileSystemLoader
 import os
 import subprocess
 
-def generate_tikz(reaction, output_dir = "output/diagrams"):
+def generate_advanced_diagram(spectator, interactions, output_dir="output/diagrams"):
     """
-    Generates a TikZ diagram for the given reaction and saves it to the specified output path.
+    Generates a Feynman diagram
     
     Args:
-        reaction (dict): The reaction data containing initial and final particles.
-        output_path (str): The path where the TikZ diagram will be saved.
+        spectator (dict): Dictionary with 'initial' and 'final' spectator particles
+        interactions (dict): Dictionary with all identified interactions:
+            - flavor_change: {'quark_pairs': [...], 'lepton_pairs': [...]}
+            - strong: {'quark_pairs': [...]}
+            - em: {'initial_pairs': [...], 'final_pairs': [...]}
+            - weak: {'pairs': [...]}
+        output_dir (str): Directory to save the output files
     """
+    # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, "diagram.tex")
-
-
-    initial = reaction["initial"]
-    final = reaction["final"]
     
-    # simple model, two initial particles per side max
-    data = {
-        "initial1": initial[0],
-        "initial2": initial[1] if len(initial) > 1 else "",
-        "final1": final[0],
-        "final2": final[1] if len(final) > 1 else "",
-        "exchange": r"\gamma or $Z$"  # Placeholder for exchange particle
+    # Build diagram structure
+    diagram_data = {
+        'spectators': spectator,            
+        'interactions': interactions,       
+        
+        # Vertical general spacing
+        'spacing': {
+            'spectator': 0,
+            'flavor_change': 1,
+            'strong': 2,
+            'em': 3,
+            'weak': 4
+        },
+        
+        # Symbols for interactions
+        'symbols': {
+            'flavor_change': 'W^\\pm',
+            'strong': 'g',
+            'em': '\\gamma',
+            'weak': 'Z'
+        }
     }
     
+    # Environment setup
     env = Environment(loader=FileSystemLoader("templates"))
-    template = env.get_template("feynman_template.tex")
+    template = env.get_template("advanced_template.tex")
     
-    tex_output = template.render(initial=reaction["initial"], final=reaction["final"])
-    output_path = os.path.join(output_dir, "diagram.tex") 
+    # Render the template with the diagram data
+    tex_output = template.render(**diagram_data)
     
     with open(output_path, "w") as f:
         f.write(tex_output)
     
-    print(f"Diagram saved to {output_path}")
+    print(f"Advanced diagram saved to {output_path}")
     compile_tex(output_path)
     
     # Clean up auxiliary files
     clean_aux_files("output/diagrams", base_filename="diagram")
-    clean_aux_files("templates", base_filename="feynman_template")
 
 
     
