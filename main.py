@@ -9,12 +9,16 @@ from src.identifier import (
     identify_em,
     identify_weak
 )
-from src.diagram_generator import generate_advanced_diagram
 
 def main():
+    print()
     print("Welcome to the Feynman Diagrams Project!")
+    print()
 
-    ## Step 1: Parse the reaction
+    # ------------------------------------------------------------
+    # STEP 1: PARSE THE REACTION
+    # ------------------------------------------------------------
+    
     reaction_str = input("Enter a process (e.g., e+ e- -> mu+ mu-): ")
     try:
         parsed_reaction = parse_reaction(reaction_str)
@@ -22,8 +26,10 @@ def main():
         print(f"Error parsing reaction: {e}")
         return
 
-    ## Step 2: Normalize particles
-    # Load databases
+    # ------------------------------------------------------------
+    # STEP 2: NORMALISE PARTICLES
+    # ------------------------------------------------------------
+    
     ElementalParticles_db = load_ElementalParticles()
     ComplexParticles_db = load_ComplexParticles()
     try:
@@ -32,7 +38,10 @@ def main():
         print(f"Error normalizing particles: {e}")
         return
 
-    ## Step 3: Validate the reaction
+    # ------------------------------------------------------------
+    # STEP 3: VALIDATE THE REACTION
+    # ------------------------------------------------------------
+    
     try:
         errors = validate_process(normalized_reaction, ElementalParticles_db)
         if errors:
@@ -47,14 +56,19 @@ def main():
         print(f"Validation error: {e}")
         return
 
-    ## Step 4: Analyze complex particles (break into elemental)
+    # ------------------------------------------------------------
+    # STEP 4: BREAK COMPLEX INTO ELEMENTAL PARTICLES
+    # ------------------------------------------------------------
     try:
         elemental_reaction = analyze_complex_particles(normalized_reaction, ComplexParticles_db)
     except Exception as e:
         print(f"Error analyzing complex particles: {e}")
         return
 
-    ## Step 5: Identify interactions
+    # ------------------------------------------------------------
+    # STEP 5: IDENTIFY REACTIONS
+    # ------------------------------------------------------------
+    
     print("Identifying interactions...")
 
     # 5.1 Process particles (group interacting/spectator)
@@ -93,7 +107,9 @@ def main():
         print("Remaining particles after interaction identification:")
         print(f"Initial: {updated_interacting['initial']}, Final: {updated_interacting['final']}")
 
-    # Step 6: Generate diagram
+    # ------------------------------------------------------------
+    # STEP 6: GENERATE DIAGRAM
+    # ------------------------------------------------------------
     interactions = {
         'flavor_change': {
             'quark_pairs': quark_flavor_pairs,
@@ -114,8 +130,7 @@ def main():
     generation = input("Do you want to generate a Feynman diagram? (yes/no): ").strip().lower()
     if generation == 'yes':
         try:
-            generate_advanced_diagram(spectator, interactions, output_dir="output/diagrams")
-            print("Feynman diagram generated successfully!")
+            print("Sorry, diagram generation is not yet implemented.")
         except Exception as e:
             print(f"Error generating diagram: {e}")
     else:
