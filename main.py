@@ -60,7 +60,7 @@ def main():
     # STEP 4: BREAK COMPLEX INTO ELEMENTAL PARTICLES
     # ------------------------------------------------------------
     try:
-        elemental_reaction = analyze_complex_particles(normalized_reaction, ComplexParticles_db)
+        elemental_reaction = analyze_complex_particles(normalized_reaction, ComplexParticles_db, ElementalParticles_db)
     except Exception as e:
         print(f"Error analyzing complex particles: {e}")
         return

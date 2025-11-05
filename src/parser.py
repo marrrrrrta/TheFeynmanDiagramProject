@@ -54,29 +54,41 @@ def normalize_particles(parsed, ElementalParticles_db, ComplexParticles_db):
         'final': [resolve(p) for p in parsed['final']]
     }
     
-def analyze_complex_particles(parsed, ComplexParticles_db):
+def analyze_complex_particles(parsed, ComplexParticles_db, ElementalParticles_db=None):
     """
     Translates the complex particles into their elemental components.
 
     Args:
         parsed (dict): parsed reaction from the 'parse_reaction' function
-        ComplexPartcicles_db (_type_): database where keys are complex particle names (i.e. 'kaon-') and values are lists of elemental particles (from particles.py)
-    """    
+        ComplexParticles_db (dict): database where keys are complex particle names (i.e. 'kaon-') and values are lists of elemental particles
+        ElementalParticles_db (dict, optional): database of elemental particles for symbol-to-name mapping
+    """
+    # Create symbol-to-name mapping for elemental particles if database is provided
+    symbol_to_name = {}
+    if ElementalParticles_db:
+        symbol_to_name = {p.symbol: name for name, p in ElementalParticles_db.items()}
+
     def translate(particle):
         if particle in ComplexParticles_db:
             # Use the first possible composition
             components = ComplexParticles_db[particle].content[0]
-            return components.split()
+            component_list = components.split()
+
+            # Map symbols to full names if possible
+            if symbol_to_name:
+                component_list = [symbol_to_name.get(comp, comp) for comp in component_list]
+
+            return component_list
         else:
             return [particle]
-    
+
     expanded_initial = []
     for p in parsed["initial"]:
         expanded_initial.extend(translate(p))
     expanded_final = []
     for p in parsed["final"]:
         expanded_final.extend(translate(p))
-    
+
     return {
         "initial": expanded_initial,
         "final": expanded_final

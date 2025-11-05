@@ -37,12 +37,12 @@ class TestComplexParser(unittest.TestCase):
         # Normalize particle names
         normalized = normalize_particles(parsed_reaction, self.elemental_db, self.complex_db)
         # Expand complex particles
-        expanded = analyze_complex_particles(normalized, self.complex_db)
-        
-        # Expected results:
-        expected_initial = ["u", "antis", "u", "d", "d"]
-        expected_final = ["u", "antiu", "u", "u", "s"]
-        
+        expanded = analyze_complex_particles(normalized, self.complex_db, self.elemental_db)
+
+        # Expected results (using full particle names):
+        expected_initial = ["up", "antistrange", "up", "down", "down"]
+        expected_final = ["up", "antiup", "up", "up", "strange"]
+
         self.assertEqual(expanded["initial"], expected_initial)
         self.assertEqual(expanded["final"], expected_final)
     
