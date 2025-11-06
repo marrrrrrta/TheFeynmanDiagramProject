@@ -1,27 +1,35 @@
 # Applies conservation laws and interaction rules
 
-def validate_process(reaction, particles_db):
+def validate_process(reaction, elemental_particles_db, complex_particles_db=None):
     """
     Validates the process by checking conservation laws. Such are, in order of preference:
-    
+
     1. Electric charge (Q)
     2. Baryon number (B)
     3. Lepton number (L)
-    
+
     The laws state that the initial property must be equal in both sides of the process. If the process is a decay, it will also check if the initial mass is greater or equal to the final mass.
-    
+
     Args:
-        reaction (???): _description_
-        particles_db (???): _description_
-    """    
+        reaction (dict): Dictionary with 'initial' and 'final' lists of particle names
+        elemental_particles_db (dict): Database of elemental particles
+        complex_particles_db (dict, optional): Database of complex particles
+    """
     errors = []
-    
+
     # Sums all the attributes of initial and final particles
     def sum_attributes(particles, attribute):
         """Sum the given attribute for all particles in the list"""
         total = 0
         for p in particles:
-            particle = particles_db[p]
+            # Try to find particle in either database
+            if p in elemental_particles_db:
+                particle = elemental_particles_db[p]
+            elif complex_particles_db and p in complex_particles_db:
+                particle = complex_particles_db[p]
+            else:
+                raise KeyError(f"Particle '{p}' not found in either database")
+
             if hasattr(particle, attribute):
                 total += getattr(particle, attribute)
         return total

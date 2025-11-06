@@ -23,8 +23,8 @@ class TestValidator(unittest.TestCase):
         reaction1 = normalize_particles(reaction1, elemental_db, complex_db)
         reaction2 = normalize_particles(reaction2, elemental_db, complex_db)
         
-        errors1 = validate_process(reaction1, elemental_db)
-        errors2 = validate_process(reaction2, elemental_db)
+        errors1 = validate_process(reaction1, elemental_db, complex_db)
+        errors2 = validate_process(reaction2, elemental_db, complex_db)
         
         self.assertEqual(errors1, [])
         self.assertNotEqual(errors2, [])

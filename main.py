@@ -41,9 +41,9 @@ def main():
     # ------------------------------------------------------------
     # STEP 3: VALIDATE THE REACTION
     # ------------------------------------------------------------
-    
+
     try:
-        errors = validate_process(normalized_reaction, ElementalParticles_db)
+        errors = validate_process(normalized_reaction, ElementalParticles_db, ComplexParticles_db)
         if errors:
             print("The reaction is not valid due to the following errors:")
             for error in errors:
@@ -60,7 +60,7 @@ def main():
     # STEP 4: BREAK COMPLEX INTO ELEMENTAL PARTICLES
     # ------------------------------------------------------------
     try:
-        elemental_reaction = analyze_complex_particles(normalized_reaction, ComplexParticles_db)
+        elemental_reaction = analyze_complex_particles(normalized_reaction, ComplexParticles_db, ElementalParticles_db)
     except Exception as e:
         print(f"Error analyzing complex particles: {e}")
         return
@@ -76,6 +76,12 @@ def main():
     updated_interacting = interacting.copy()
     interactions_found = []
 
+    # Initialize interaction variables
+    quark_pairs = []
+    initial_em = []
+    final_em = []
+    weak_pairs = []
+
     # 5.2 Check for flavor change
     quark_flavor_pairs, lepton_flavor_pairs, updated_interacting = identify_flavor_change(interacting, ElementalParticles_db)
     if quark_flavor_pairs or lepton_flavor_pairs:
@@ -84,19 +90,19 @@ def main():
             print(f"Quark flavor pairs: {quark_flavor_pairs}")
         if lepton_flavor_pairs:
             print(f"Lepton flavor pairs: {lepton_flavor_pairs}")
-    
+
     # 5.3 Check strong interaction
     if updated_interacting['initial'] or updated_interacting['final']:
         quark_pairs, updated_interacting = identify_strong(updated_interacting, ElementalParticles_db)
         if quark_pairs:
             print(f"Strong interaction quark pairs: {quark_pairs}")
-    
+
     # 5.4 Check electromagnetic interaction
     if updated_interacting['initial'] or updated_interacting['final']:
         initial_em, final_em, updated_interacting = identify_em(updated_interacting, ElementalParticles_db)
         if initial_em or final_em:
             print(f"Electromagnetic interaction particles: Initial: {initial_em}, Final: {final_em}")
-    
+
     # 5.5 Check weak interaction
     if updated_interacting['initial'] or updated_interacting['final']:
         weak_pairs, updated_interacting = identify_weak(updated_interacting, ElementalParticles_db)
