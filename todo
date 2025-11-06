@@ -7,16 +7,17 @@
 [ ] README.md                   # Project description
 
 [X] data/
-    └── [X] particles.json          # Particle database (mass, charge, etc.)
+    └── [X] ComplexParticles.json             # Complex particle database (mass, charge, etc.)
+    └── [X] ElementalParticles.json           # Elemental particle database
 
 [X] src/
     └── [X] __init__.py
     └── [X] parser.py               # Input parser and normalization
     └── [X] particles.py            # Particle class and loading logic
     └── [X] validator.py            # Validity checks (conservation laws, rules)
-    └── [X] diagram_generator.py    # TikZ layout logic and output
+    └── [ ] diagram_generator.py    # TikZ layout logic and output
     └── [X] templates/
-      └── [X] feynman_template.tex  # Jinja2 TikZ template
+      └── [ ] feynman_template.tex  # Jinja2 TikZ template
     └── [ ] compiler.py             # Optional: compile TikZ to PDF or PNG
 
 [X] tests/
@@ -31,18 +32,5 @@
     └── [X] diagrams/               # Generated .tex or .pdf diagrams
     └── [X] logs/                   # (Optional) Logs or error message
 
-
-# STEPS
-
-[ ] Step 9: Polish
-	[X] !!!!! Complex particles 
-	[X]	Unify the symbol in .json. greek letters or latex code?
-		[X] Add property to .json for LaTeX symbols
-	[X]	Support synonyms (e+, positron)
-	[ ] Update template.tex
-	[X]	Add more particles/interactions to particles.json
-	[ ] Add identifier of reactions
-		[ ] Add support for different processes in .tex
-	[ ] Pygame or tkinter GUI (interfaz)
 
 ⸻
